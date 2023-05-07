@@ -10,7 +10,7 @@ interface rarity {
 contract rarity_attributes {
 
     uint constant POINT_BUY = 32;
-    rarity constant rm = rarity(0xce761D788DF608BD21bdd59d6f4B54b2e27F25Bb);
+    rarity public immutable rm;
 
     struct ability_score {
         uint32 strength;
@@ -27,6 +27,10 @@ contract rarity_attributes {
 
     event Created(address indexed creator, uint summoner, uint32 strength, uint32 dexterity, uint32 constitution, uint32 intelligence, uint32 wisdom, uint32 charisma);
     event Leveled(address indexed leveler, uint summoner, uint32 strength, uint32 dexterity, uint32 constitution, uint32 intelligence, uint32 wisdom, uint32 charisma);
+
+    constructor(address _rm){
+        rm = rarity(_rm);
+    }
 
     function _isApprovedOrOwner(uint _summoner) internal view returns (bool) {
         return rm.getApproved(_summoner) == msg.sender || rm.ownerOf(_summoner) == msg.sender;
