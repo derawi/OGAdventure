@@ -38,11 +38,11 @@ async function deploy(name, contractName, signer, ...args) {
     - codex-feat-2
     - feats - ok
 
-    - rarity_crafting_common (Crafting I RCI)
+    - rarity_crafting_common (Crafting I RCI) - ok
 
-    - wGold
+    - wGold - ok
 
-    - library
+    - library - ok
 
 
 */
@@ -58,8 +58,9 @@ async function main() {
     signer,
     rarity.address
   );
-
   const gold = await deploy("Gold", "contracts/core/gold.sol:rarity_gold", signer, rarity.address);
+
+  const names = await deploy("Names", "contracts/core/namesv2.sol:rarity_names", signer, rarity.address, gold.address);
   const crafting_materials1 = await deploy(
     "rarity_crafting-materials-1",
     "contracts/core/rarity_crafting-materials-1.sol:rarity_crafting_materials",
@@ -109,10 +110,42 @@ async function main() {
     codex_feats_2.address
   );
 
-  // To implement
-  // - rarity_crafting_common (Crafting I RCI)
+  // Other
+  const crafting1 = await deploy(
+    "Crafting 1 RCI",
+    "contracts/core/rarity_crafting_common.sol:rarity_crafting",
+    signer,
+    rarity.address,
+    attributes.address,
+    crafting_materials1.address,
+    gold.address,
+    skills.address,
+    codex_base_random.address,
+    codex_items_goods.address,
+    codex_items_armor.address,
+    codex_items_weapons.address
+  );
 
-  // - wGold
+  const wGold = await deploy(
+    "wRGLD",
+    "contracts/core/wRGLD.sol:wrapped_rarity_gold",
+    signer,
+    rarity.address,
+    gold.address
+  );
+
+  const library = await deploy(
+    "Library",
+    "contracts/integration/rarity_library.sol:rarity_library",
+    signer,
+    rarity.address,
+    attributes.address,
+    skills.address,
+    gold.address,
+    crafting_materials1.address,
+    crafting1.address,
+    names.address
+  );
 
   // - library
 }

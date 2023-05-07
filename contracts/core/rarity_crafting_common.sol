@@ -5,27 +5,48 @@ interface IERC165 {
     function supportsInterface(bytes4 interfaceId) external view returns (bool);
 }
 
-
 interface IERC721 is IERC165 {
-    event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
-    event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId);
-    event ApprovalForAll(address indexed owner, address indexed operator, bool approved);
+    event Transfer(
+        address indexed from,
+        address indexed to,
+        uint256 indexed tokenId
+    );
+    event Approval(
+        address indexed owner,
+        address indexed approved,
+        uint256 indexed tokenId
+    );
+    event ApprovalForAll(
+        address indexed owner,
+        address indexed operator,
+        bool approved
+    );
+
     function balanceOf(address owner) external view returns (uint256 balance);
+
     function ownerOf(uint256 tokenId) external view returns (address owner);
+
     function safeTransferFrom(
         address from,
         address to,
         uint256 tokenId
     ) external;
-    function transferFrom(
-        address from,
-        address to,
-        uint256 tokenId
-    ) external;
+
+    function transferFrom(address from, address to, uint256 tokenId) external;
+
     function approve(address to, uint256 tokenId) external;
-    function getApproved(uint256 tokenId) external view returns (address operator);
+
+    function getApproved(
+        uint256 tokenId
+    ) external view returns (address operator);
+
     function setApprovalForAll(address operator, bool _approved) external;
-    function isApprovedForAll(address owner, address operator) external view returns (bool);
+
+    function isApprovedForAll(
+        address owner,
+        address operator
+    ) external view returns (bool);
+
     function safeTransferFrom(
         address from,
         address to,
@@ -65,14 +86,18 @@ interface IERC721Receiver {
 }
 
 abstract contract ERC165 is IERC165 {
-    function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
+    function supportsInterface(
+        bytes4 interfaceId
+    ) public view virtual override returns (bool) {
         return interfaceId == type(IERC165).interfaceId;
     }
 }
 
 interface IERC721Metadata is IERC721 {
     function name() external view returns (string memory);
+
     function symbol() external view returns (string memory);
+
     function tokenURI(uint256 tokenId) external view returns (string memory);
 }
 
@@ -84,21 +109,33 @@ contract ERC721 is ERC165, IERC721 {
     mapping(uint256 => address) private _tokenApprovals;
     mapping(address => mapping(address => bool)) private _operatorApprovals;
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC165, IERC165) returns (bool) {
+    function supportsInterface(
+        bytes4 interfaceId
+    ) public view virtual override(ERC165, IERC165) returns (bool) {
         return
             interfaceId == type(IERC721).interfaceId ||
             interfaceId == type(IERC721Metadata).interfaceId ||
             super.supportsInterface(interfaceId);
     }
 
-    function balanceOf(address owner) public view virtual override returns (uint256) {
-        require(owner != address(0), "ERC721: balance query for the zero address");
+    function balanceOf(
+        address owner
+    ) public view virtual override returns (uint256) {
+        require(
+            owner != address(0),
+            "ERC721: balance query for the zero address"
+        );
         return _balances[owner];
     }
 
-    function ownerOf(uint256 tokenId) public view virtual override returns (address) {
+    function ownerOf(
+        uint256 tokenId
+    ) public view virtual override returns (address) {
         address owner = _owners[tokenId];
-        require(owner != address(0), "ERC721: owner query for nonexistent token");
+        require(
+            owner != address(0),
+            "ERC721: owner query for nonexistent token"
+        );
         return owner;
     }
 
@@ -118,13 +155,21 @@ contract ERC721 is ERC165, IERC721 {
         _approve(to, tokenId);
     }
 
-    function getApproved(uint256 tokenId) public view virtual override returns (address) {
-        require(_exists(tokenId), "ERC721: approved query for nonexistent token");
+    function getApproved(
+        uint256 tokenId
+    ) public view virtual override returns (address) {
+        require(
+            _exists(tokenId),
+            "ERC721: approved query for nonexistent token"
+        );
 
         return _tokenApprovals[tokenId];
     }
 
-    function setApprovalForAll(address operator, bool approved) public virtual override {
+    function setApprovalForAll(
+        address operator,
+        bool approved
+    ) public virtual override {
         require(operator != msg.sender, "ERC721: approve to caller");
 
         _operatorApprovals[msg.sender][operator] = approved;
@@ -139,7 +184,10 @@ contract ERC721 is ERC165, IERC721 {
         return size > 0;
     }
 
-    function isApprovedForAll(address owner, address operator) public view virtual override returns (bool) {
+    function isApprovedForAll(
+        address owner,
+        address operator
+    ) public view virtual override returns (bool) {
         return _operatorApprovals[owner][operator];
     }
 
@@ -149,7 +197,10 @@ contract ERC721 is ERC165, IERC721 {
         uint256 tokenId
     ) public virtual override {
         //solhint-disable-next-line max-line-length
-        require(_isApprovedOrOwner(msg.sender, tokenId), "ERC721: transfer caller is not owner nor approved");
+        require(
+            _isApprovedOrOwner(msg.sender, tokenId),
+            "ERC721: transfer caller is not owner nor approved"
+        );
 
         _transfer(from, to, tokenId);
     }
@@ -168,7 +219,10 @@ contract ERC721 is ERC165, IERC721 {
         uint256 tokenId,
         bytes memory _data
     ) public virtual override {
-        require(_isApprovedOrOwner(msg.sender, tokenId), "ERC721: transfer caller is not owner nor approved");
+        require(
+            _isApprovedOrOwner(msg.sender, tokenId),
+            "ERC721: transfer caller is not owner nor approved"
+        );
         _safeTransfer(from, to, tokenId, _data);
     }
 
@@ -179,17 +233,28 @@ contract ERC721 is ERC165, IERC721 {
         bytes memory _data
     ) internal virtual {
         _transfer(from, to, tokenId);
-        require(_checkOnERC721Received(from, to, tokenId, _data), "ERC721: transfer to non ERC721Receiver implementer");
+        require(
+            _checkOnERC721Received(from, to, tokenId, _data),
+            "ERC721: transfer to non ERC721Receiver implementer"
+        );
     }
 
     function _exists(uint256 tokenId) internal view virtual returns (bool) {
         return _owners[tokenId] != address(0);
     }
 
-    function _isApprovedOrOwner(address spender, uint256 tokenId) internal view virtual returns (bool) {
-        require(_exists(tokenId), "ERC721: operator query for nonexistent token");
+    function _isApprovedOrOwner(
+        address spender,
+        uint256 tokenId
+    ) internal view virtual returns (bool) {
+        require(
+            _exists(tokenId),
+            "ERC721: operator query for nonexistent token"
+        );
         address owner = ERC721.ownerOf(tokenId);
-        return (spender == owner || getApproved(tokenId) == spender || isApprovedForAll(owner, spender));
+        return (spender == owner ||
+            getApproved(tokenId) == spender ||
+            isApprovedForAll(owner, spender));
     }
 
     function _safeMint(address to, uint256 tokenId) internal virtual {
@@ -239,7 +304,10 @@ contract ERC721 is ERC165, IERC721 {
         address to,
         uint256 tokenId
     ) internal virtual {
-        require(ERC721.ownerOf(tokenId) == from, "ERC721: transfer of token that is not own");
+        require(
+            ERC721.ownerOf(tokenId) == from,
+            "ERC721: transfer of token that is not own"
+        );
         require(to != address(0), "ERC721: transfer to the zero address");
 
         _beforeTokenTransfer(from, to, tokenId);
@@ -266,11 +334,20 @@ contract ERC721 is ERC165, IERC721 {
         bytes memory _data
     ) private returns (bool) {
         if (_isContract(to)) {
-            try IERC721Receiver(to).onERC721Received(msg.sender, from, tokenId, _data) returns (bytes4 retval) {
+            try
+                IERC721Receiver(to).onERC721Received(
+                    msg.sender,
+                    from,
+                    tokenId,
+                    _data
+                )
+            returns (bytes4 retval) {
                 return retval == IERC721Receiver(to).onERC721Received.selector;
             } catch (bytes memory reason) {
                 if (reason.length == 0) {
-                    revert("ERC721: transfer to non ERC721Receiver implementer");
+                    revert(
+                        "ERC721: transfer to non ERC721Receiver implementer"
+                    );
                 } else {
                     assembly {
                         revert(add(32, reason), mload(reason))
@@ -291,7 +368,12 @@ contract ERC721 is ERC165, IERC721 {
 
 interface IERC721Enumerable is IERC721 {
     function totalSupply() external view returns (uint256);
-    function tokenOfOwnerByIndex(address owner, uint256 index) external view returns (uint256 tokenId);
+
+    function tokenOfOwnerByIndex(
+        address owner,
+        uint256 index
+    ) external view returns (uint256 tokenId);
+
     function tokenByIndex(uint256 index) external view returns (uint256);
 }
 
@@ -301,8 +383,14 @@ abstract contract ERC721Enumerable is ERC721, IERC721Enumerable {
     uint256[] private _allTokens;
     mapping(uint256 => uint256) private _allTokensIndex;
 
-    function tokenOfOwnerByIndex(address owner, uint256 index) public view virtual override returns (uint256) {
-        require(index < ERC721.balanceOf(owner), "ERC721Enumerable: owner index out of bounds");
+    function tokenOfOwnerByIndex(
+        address owner,
+        uint256 index
+    ) public view virtual override returns (uint256) {
+        require(
+            index < ERC721.balanceOf(owner),
+            "ERC721Enumerable: owner index out of bounds"
+        );
         return _ownedTokens[owner][index];
     }
 
@@ -310,8 +398,13 @@ abstract contract ERC721Enumerable is ERC721, IERC721Enumerable {
         return _allTokens.length;
     }
 
-    function tokenByIndex(uint256 index) public view virtual override returns (uint256) {
-        require(index < ERC721Enumerable.totalSupply(), "ERC721Enumerable: global index out of bounds");
+    function tokenByIndex(
+        uint256 index
+    ) public view virtual override returns (uint256) {
+        require(
+            index < ERC721Enumerable.totalSupply(),
+            "ERC721Enumerable: global index out of bounds"
+        );
         return _allTokens[index];
     }
 
@@ -345,7 +438,10 @@ abstract contract ERC721Enumerable is ERC721, IERC721Enumerable {
         _allTokens.push(tokenId);
     }
 
-    function _removeTokenFromOwnerEnumeration(address from, uint256 tokenId) private {
+    function _removeTokenFromOwnerEnumeration(
+        address from,
+        uint256 tokenId
+    ) private {
         uint256 lastTokenIndex = ERC721.balanceOf(from) - 1;
         uint256 tokenIndex = _ownedTokensIndex[tokenId];
 
@@ -377,55 +473,89 @@ abstract contract ERC721Enumerable is ERC721, IERC721Enumerable {
 
 interface rarity {
     function level(uint) external view returns (uint);
+
     function getApproved(uint) external view returns (address);
+
     function ownerOf(uint) external view returns (address);
+
     function class(uint) external view returns (uint);
+
     function summon(uint _class) external;
+
     function next_summoner() external view returns (uint);
+
     function spend_xp(uint _summoner, uint _xp) external;
 }
 
 interface rarity_attributes {
     function character_created(uint) external view returns (bool);
-    function ability_scores(uint) external view returns (uint32,uint32,uint32,uint32,uint32,uint32);
+
+    function ability_scores(
+        uint
+    ) external view returns (uint32, uint32, uint32, uint32, uint32, uint32);
 }
 
 interface rarity_skills {
-    function get_skills(uint _summoner) external view returns (uint8[36] memory);
+    function get_skills(
+        uint _summoner
+    ) external view returns (uint8[36] memory);
 }
 
 interface rarity_gold {
-    function transferFrom(uint executor, uint from, uint to, uint amount) external returns (bool);
+    function transferFrom(
+        uint executor,
+        uint from,
+        uint to,
+        uint amount
+    ) external returns (bool);
 }
 
 interface rarity_crafting_materials_i {
-    function transferFrom(uint executor, uint from, uint to, uint amount) external returns (bool);
+    function transferFrom(
+        uint executor,
+        uint from,
+        uint to,
+        uint amount
+    ) external returns (bool);
 }
 
 interface codex_items_goods {
-    function item_by_id(uint _id) external pure returns(
-        uint id,
-        uint cost,
-        uint weight,
-        string memory name,
-        string memory description
-    );
+    function item_by_id(
+        uint _id
+    )
+        external
+        pure
+        returns (
+            uint id,
+            uint cost,
+            uint weight,
+            string memory name,
+            string memory description
+        );
 }
 
 interface codex_items_armor {
-    function get_proficiency_by_id(uint _id) external pure returns (string memory description);
-    function item_by_id(uint _id) external pure returns(
-        uint id,
-        uint cost,
-        uint proficiency,
-        uint weight,
-        uint armor_bonus,
-        uint max_dex_bonus,
-        int penalty,
-        uint spell_failure,
-        string memory name,
-        string memory description
-    );
+    function get_proficiency_by_id(
+        uint _id
+    ) external pure returns (string memory description);
+
+    function item_by_id(
+        uint _id
+    )
+        external
+        pure
+        returns (
+            uint id,
+            uint cost,
+            uint proficiency,
+            uint weight,
+            uint armor_bonus,
+            uint max_dex_bonus,
+            int penalty,
+            uint spell_failure,
+            string memory name,
+            string memory description
+        );
 }
 
 interface codex_items_weapons {
@@ -444,10 +574,19 @@ interface codex_items_weapons {
         string description;
     }
 
-    function get_proficiency_by_id(uint _id) external pure returns (string memory description);
-    function get_encumbrance_by_id(uint _id) external pure returns (string memory description);
-    function get_damage_type_by_id(uint _id) external pure returns (string memory description);
-    function item_by_id(uint _id) external pure returns(weapon memory _weapon);
+    function get_proficiency_by_id(
+        uint _id
+    ) external pure returns (string memory description);
+
+    function get_encumbrance_by_id(
+        uint _id
+    ) external pure returns (string memory description);
+
+    function get_damage_type_by_id(
+        uint _id
+    ) external pure returns (string memory description);
+
+    function item_by_id(uint _id) external pure returns (weapon memory _weapon);
 }
 
 interface codex_base_random {
@@ -458,27 +597,54 @@ contract rarity_crafting is ERC721Enumerable {
     uint public next_item;
     uint constant craft_xp_per_day = 250e18;
 
-    rarity constant _rm = rarity(0xce761D788DF608BD21bdd59d6f4B54b2e27F25Bb);
-    rarity_attributes constant _attr = rarity_attributes(0xB5F5AF1087A8DA62A23b08C00C6ec9af21F397a1);
-    rarity_crafting_materials_i constant _craft_i = rarity_crafting_materials_i(0x2A0F1cB17680161cF255348dDFDeE94ea8Ca196A);
-    rarity_gold constant _gold = rarity_gold(0x2069B76Afe6b734Fb65D1d099E7ec64ee9CC76B2);
-    rarity_skills constant _skills = rarity_skills(0x51C0B29A1d84611373BA301706c6B4b72283C80F);
+    rarity immutable _rm;
+    rarity_attributes immutable _attr;
+    rarity_crafting_materials_i immutable _craft_i;
+    rarity_gold immutable _gold;
+    rarity_skills immutable _skills;
+    codex_base_random immutable _random;
+    codex_items_goods immutable _goods;
+    codex_items_armor immutable _armor;
+    codex_items_weapons immutable _weapons;
 
-    codex_base_random constant _random = codex_base_random(0x7426dBE5207C2b5DaC57d8e55F0959fcD99661D4);
-    codex_items_goods constant _goods = codex_items_goods(0x0C5C1CC0A7AE65FE372fbb08FF16578De4b980f3);
-    codex_items_armor constant _armor = codex_items_armor(0xf5114A952Aca3e9055a52a87938efefc8BB7878C);
-    codex_items_weapons constant _weapons = codex_items_weapons(0xeE1a2EA55945223404d73C0BbE57f540BBAAD0D8);
+    string public constant name = "Rarity Crafting (I)";
+    string public constant symbol = "RC(I)";
 
-    string constant public name = "Rarity Crafting (I)";
-    string constant public symbol = "RC(I)";
-
-    event Crafted(address indexed owner, uint check, uint summoner, uint base_type, uint item_type, uint gold, uint craft_i);
+    event Crafted(
+        address indexed owner,
+        uint check,
+        uint summoner,
+        uint base_type,
+        uint item_type,
+        uint gold,
+        uint craft_i
+    );
 
     uint public immutable SUMMMONER_ID;
 
-    constructor() {
-        SUMMMONER_ID = _rm.next_summoner();
-        _rm.summon(11);
+    constructor(
+        rarity __rm,
+        rarity_attributes __attr,
+        rarity_crafting_materials_i __craft_i,
+        rarity_gold __gold,
+        rarity_skills __skills,
+        codex_base_random __random,
+        codex_items_goods __goods,
+        codex_items_armor __armor,
+        codex_items_weapons __weapons
+    ) {
+        _rm = __rm;
+        _attr = __attr;
+        _craft_i = __craft_i;
+        _gold = __gold;
+        _skills = __skills;
+        _random = __random;
+        _goods = __goods;
+        _armor = __armor;
+        _weapons = __weapons;
+
+        SUMMMONER_ID = __rm.next_summoner();
+        __rm.summon(11);
     }
 
     struct item {
@@ -489,20 +655,24 @@ contract rarity_crafting is ERC721Enumerable {
     }
 
     function _isApprovedOrOwner(uint _summoner) internal view returns (bool) {
-        return _rm.getApproved(_summoner) == msg.sender || _rm.ownerOf(_summoner) == msg.sender;
+        return
+            _rm.getApproved(_summoner) == msg.sender ||
+            _rm.ownerOf(_summoner) == msg.sender;
     }
 
     function get_goods_dc() public pure returns (uint dc) {
         return 20;
     }
 
-    function get_armor_dc(uint _item_id) public pure returns (uint dc) {
-        (,,,,uint _armor_bonus,,,,,) = _armor.item_by_id(_item_id);
+    function get_armor_dc(uint _item_id) public view returns (uint dc) {
+        (, , , , uint _armor_bonus, , , , , ) = _armor.item_by_id(_item_id);
         return 20 + _armor_bonus;
     }
 
-    function get_weapon_dc(uint _item_id) public pure returns (uint dc) {
-        codex_items_weapons.weapon memory _weapon = _weapons.item_by_id(_item_id);
+    function get_weapon_dc(uint _item_id) public view returns (uint dc) {
+        codex_items_weapons.weapon memory _weapon = _weapons.item_by_id(
+            _item_id
+        );
         if (_weapon.proficiency == 1) {
             return 20;
         } else if (_weapon.proficiency == 2) {
@@ -512,7 +682,10 @@ contract rarity_crafting is ERC721Enumerable {
         }
     }
 
-    function get_dc(uint _base_type, uint _item_id) public pure returns (uint dc) {
+    function get_dc(
+        uint _base_type,
+        uint _item_id
+    ) public view returns (uint dc) {
         if (_base_type == 1) {
             return get_goods_dc();
         } else if (_base_type == 2) {
@@ -522,30 +695,40 @@ contract rarity_crafting is ERC721Enumerable {
         }
     }
 
-    function get_item_cost(uint _base_type, uint _item_type) public pure returns (uint cost) {
+    function get_item_cost(
+        uint _base_type,
+        uint _item_type
+    ) public view returns (uint cost) {
         if (_base_type == 1) {
-            (,cost,,,) = _goods.item_by_id(_item_type);
+            (, cost, , , ) = _goods.item_by_id(_item_type);
         } else if (_base_type == 2) {
-            (,cost,,,,,,,,) = _armor.item_by_id(_item_type);
+            (, cost, , , , , , , , ) = _armor.item_by_id(_item_type);
         } else if (_base_type == 3) {
-            codex_items_weapons.weapon memory _weapon = _weapons.item_by_id(_item_type);
+            codex_items_weapons.weapon memory _weapon = _weapons.item_by_id(
+                _item_type
+            );
             cost = _weapon.cost;
         }
     }
 
-    function modifier_for_attribute(uint _attribute) public pure returns (int _modifier) {
+    function modifier_for_attribute(
+        uint _attribute
+    ) public pure returns (int _modifier) {
         if (_attribute == 9) {
             return -1;
         }
         return (int(_attribute) - 10) / 2;
     }
 
-    function craft_skillcheck(uint _summoner, uint _dc) public view returns (bool crafted, int check) {
+    function craft_skillcheck(
+        uint _summoner,
+        uint _dc
+    ) public view returns (bool crafted, int check) {
         check = int(uint(_skills.get_skills(_summoner)[5]));
         if (check == 0) {
             return (false, 0);
         }
-        (,,,uint _int,,) = _attr.ability_scores(_summoner);
+        (, , , uint _int, , ) = _attr.ability_scores(_summoner);
         check += modifier_for_attribute(_int);
         if (check <= 0) {
             return (false, 0);
@@ -554,7 +737,10 @@ contract rarity_crafting is ERC721Enumerable {
         return (check >= int(_dc), check);
     }
 
-    function isValid(uint _base_type, uint _item_type) public pure returns (bool) {
+    function isValid(
+        uint _base_type,
+        uint _item_type
+    ) public pure returns (bool) {
         if (_base_type == 1) {
             return (1 <= _item_type && _item_type <= 24);
         } else if (_base_type == 2) {
@@ -565,7 +751,12 @@ contract rarity_crafting is ERC721Enumerable {
         return false;
     }
 
-    function simulate(uint _summoner, uint _base_type, uint _item_type, uint _crafting_materials) external view returns (bool crafted, int check, uint cost, uint dc) {
+    function simulate(
+        uint _summoner,
+        uint _base_type,
+        uint _item_type,
+        uint _crafting_materials
+    ) external view returns (bool crafted, int check, uint cost, uint dc) {
         dc = get_dc(_base_type, _item_type);
         if (_crafting_materials >= 10) {
             dc = dc - (_crafting_materials / 10);
@@ -576,23 +767,57 @@ contract rarity_crafting is ERC721Enumerable {
         }
     }
 
-    function craft(uint _summoner, uint8 _base_type, uint8 _item_type, uint _crafting_materials) external {
+    function craft(
+        uint _summoner,
+        uint8 _base_type,
+        uint8 _item_type,
+        uint _crafting_materials
+    ) external {
         require(_isApprovedOrOwner(_summoner), "!owner");
         require(_attr.character_created(_summoner), "!created");
         require(_summoner != SUMMMONER_ID, "hax0r");
         require(isValid(_base_type, _item_type), "!valid");
         uint _dc = get_dc(_base_type, _item_type);
         if (_crafting_materials >= 10) {
-            require(_craft_i.transferFrom(SUMMMONER_ID, _summoner, SUMMMONER_ID, _crafting_materials), "!craft");
+            require(
+                _craft_i.transferFrom(
+                    SUMMMONER_ID,
+                    _summoner,
+                    SUMMMONER_ID,
+                    _crafting_materials
+                ),
+                "!craft"
+            );
             _dc = _dc - (_crafting_materials / 10);
         }
         (bool crafted, int check) = craft_skillcheck(_summoner, _dc);
         if (crafted) {
             uint _cost = get_item_cost(_base_type, _item_type);
-            require(_gold.transferFrom(SUMMMONER_ID, _summoner, SUMMMONER_ID, _cost), "!gold");
-            items[next_item] = item(_base_type, _item_type, uint32(block.timestamp), _summoner);
+            require(
+                _gold.transferFrom(
+                    SUMMMONER_ID,
+                    _summoner,
+                    SUMMMONER_ID,
+                    _cost
+                ),
+                "!gold"
+            );
+            items[next_item] = item(
+                _base_type,
+                _item_type,
+                uint32(block.timestamp),
+                _summoner
+            );
             _safeMint(msg.sender, next_item);
-            emit Crafted(msg.sender, uint(check), _summoner, _base_type, _item_type, _cost, _crafting_materials);
+            emit Crafted(
+                msg.sender,
+                uint(check),
+                _summoner,
+                _base_type,
+                _item_type,
+                _cost,
+                _crafting_materials
+            );
             next_item++;
         }
         _rm.spend_xp(_summoner, craft_xp_per_day);
@@ -621,33 +846,107 @@ contract rarity_crafting is ERC721Enumerable {
         }
     }
 
-    function get_token_uri_goods(uint _item) public view returns (string memory output) {
+    function get_token_uri_goods(
+        uint _item
+    ) public view returns (string memory output) {
         item memory _data = items[_item];
         {
-            (,
+            (
+                ,
                 uint _cost,
                 uint _weight,
                 string memory _name,
                 string memory _description
             ) = _goods.item_by_id(_data.item_type);
             output = '<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin meet" viewBox="0 0 350 350"><style>.base { fill: white; font-family: serif; font-size: 14px; }</style><rect width="100%" height="100%" fill="black" /><text x="10" y="20" class="base">';
-            output = string(abi.encodePacked(output, "category ", get_type(_data.base_type), '</text><text x="10" y="40" class="base">'));
-            output = string(abi.encodePacked(output, "name ", _name, '</text><text x="10" y="60" class="base">'));
-            output = string(abi.encodePacked(output, "cost ", toString(_cost/1e18), "gp", '</text><text x="10" y="80" class="base">'));
-            output = string(abi.encodePacked(output, "weight ", toString(_weight), "lb", '</text><text x="10" y="100" class="base">'));
-            output = string(abi.encodePacked(output, "description ", _description, '</text><text x="10" y="120" class="base">'));
-            output = string(abi.encodePacked(output, "crafted by ", toString(_data.crafter), '</text><text x="10" y="140" class="base">'));
-            output = string(abi.encodePacked(output, "crafted at ", toString(_data.crafted), '</text></svg>'));
+            output = string(
+                abi.encodePacked(
+                    output,
+                    "category ",
+                    get_type(_data.base_type),
+                    '</text><text x="10" y="40" class="base">'
+                )
+            );
+            output = string(
+                abi.encodePacked(
+                    output,
+                    "name ",
+                    _name,
+                    '</text><text x="10" y="60" class="base">'
+                )
+            );
+            output = string(
+                abi.encodePacked(
+                    output,
+                    "cost ",
+                    toString(_cost / 1e18),
+                    "gp",
+                    '</text><text x="10" y="80" class="base">'
+                )
+            );
+            output = string(
+                abi.encodePacked(
+                    output,
+                    "weight ",
+                    toString(_weight),
+                    "lb",
+                    '</text><text x="10" y="100" class="base">'
+                )
+            );
+            output = string(
+                abi.encodePacked(
+                    output,
+                    "description ",
+                    _description,
+                    '</text><text x="10" y="120" class="base">'
+                )
+            );
+            output = string(
+                abi.encodePacked(
+                    output,
+                    "crafted by ",
+                    toString(_data.crafter),
+                    '</text><text x="10" y="140" class="base">'
+                )
+            );
+            output = string(
+                abi.encodePacked(
+                    output,
+                    "crafted at ",
+                    toString(_data.crafted),
+                    "</text></svg>"
+                )
+            );
         }
-        output = string(abi.encodePacked('data:application/json;base64,', Base64.encode(bytes(string(abi.encodePacked('{"name": "item #', toString(_item), '", "description": "Rarity tier 1, non magical, item crafting.", "image": "data:image/svg+xml;base64,', Base64.encode(bytes(output)), '"}'))))));
+        output = string(
+            abi.encodePacked(
+                "data:application/json;base64,",
+                Base64.encode(
+                    bytes(
+                        string(
+                            abi.encodePacked(
+                                '{"name": "item #',
+                                toString(_item),
+                                '", "description": "Rarity tier 1, non magical, item crafting.", "image": "data:image/svg+xml;base64,',
+                                Base64.encode(bytes(output)),
+                                '"}'
+                            )
+                        )
+                    )
+                )
+            )
+        );
 
         return output;
     }
 
-    function get_token_uri_armor(uint _item) public view returns (string memory output) {
+    function get_token_uri_armor(
+        uint _item
+    ) public view returns (string memory output) {
         item memory _data = items[_item];
         {
-            (,
+            (
+                ,
                 uint _cost,
                 uint _proficiency,
                 uint _weight,
@@ -659,55 +958,271 @@ contract rarity_crafting is ERC721Enumerable {
                 string memory _description
             ) = _armor.item_by_id(_data.item_type);
             output = '<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin meet" viewBox="0 0 350 350"><style>.base { fill: white; font-family: serif; font-size: 14px; }</style><rect width="100%" height="100%" fill="black" /><text x="10" y="20" class="base">';
-            output = string(abi.encodePacked(output, "category ", get_type(_data.base_type), '</text><text x="10" y="40" class="base">'));
-            output = string(abi.encodePacked(output, "name ", _name, '</text><text x="10" y="60" class="base">'));
-            output = string(abi.encodePacked(output, "cost ", toString(_cost/1e18), "gp", '</text><text x="10" y="80" class="base">'));
-            output = string(abi.encodePacked(output, "weight ", toString(_weight), "lb", '</text><text x="10" y="100" class="base">'));
-            output = string(abi.encodePacked(output, "proficiency ", _armor.get_proficiency_by_id(_proficiency), '</text><text x="10" y="120" class="base">'));
-            output = string(abi.encodePacked(output, "armor bonus ", toString(_armor_bonus), '</text><text x="10" y="140" class="base">'));
-            output = string(abi.encodePacked(output, "max dex ", toString(_max_dex_bonus), '</text><text x="10" y="160" class="base">'));
-            output = string(abi.encodePacked(output, "penalty ", toString(_penalty), '</text><text x="10" y="180" class="base">'));
-            output = string(abi.encodePacked(output, "spell failure ", toString(_spell_failure), "%", '</text><text x="10" y="200" class="base">'));
-            output = string(abi.encodePacked(output, "description ", _description, '</text><text x="10" y="220" class="base">'));
-            output = string(abi.encodePacked(output, "crafted by ", toString(_data.crafter), '</text><text x="10" y="240" class="base">'));
-            output = string(abi.encodePacked(output, "crafted at ", toString(_data.crafted), '</text></svg>'));
+            output = string(
+                abi.encodePacked(
+                    output,
+                    "category ",
+                    get_type(_data.base_type),
+                    '</text><text x="10" y="40" class="base">'
+                )
+            );
+            output = string(
+                abi.encodePacked(
+                    output,
+                    "name ",
+                    _name,
+                    '</text><text x="10" y="60" class="base">'
+                )
+            );
+            output = string(
+                abi.encodePacked(
+                    output,
+                    "cost ",
+                    toString(_cost / 1e18),
+                    "gp",
+                    '</text><text x="10" y="80" class="base">'
+                )
+            );
+            output = string(
+                abi.encodePacked(
+                    output,
+                    "weight ",
+                    toString(_weight),
+                    "lb",
+                    '</text><text x="10" y="100" class="base">'
+                )
+            );
+            output = string(
+                abi.encodePacked(
+                    output,
+                    "proficiency ",
+                    _armor.get_proficiency_by_id(_proficiency),
+                    '</text><text x="10" y="120" class="base">'
+                )
+            );
+            output = string(
+                abi.encodePacked(
+                    output,
+                    "armor bonus ",
+                    toString(_armor_bonus),
+                    '</text><text x="10" y="140" class="base">'
+                )
+            );
+            output = string(
+                abi.encodePacked(
+                    output,
+                    "max dex ",
+                    toString(_max_dex_bonus),
+                    '</text><text x="10" y="160" class="base">'
+                )
+            );
+            output = string(
+                abi.encodePacked(
+                    output,
+                    "penalty ",
+                    toString(_penalty),
+                    '</text><text x="10" y="180" class="base">'
+                )
+            );
+            output = string(
+                abi.encodePacked(
+                    output,
+                    "spell failure ",
+                    toString(_spell_failure),
+                    "%",
+                    '</text><text x="10" y="200" class="base">'
+                )
+            );
+            output = string(
+                abi.encodePacked(
+                    output,
+                    "description ",
+                    _description,
+                    '</text><text x="10" y="220" class="base">'
+                )
+            );
+            output = string(
+                abi.encodePacked(
+                    output,
+                    "crafted by ",
+                    toString(_data.crafter),
+                    '</text><text x="10" y="240" class="base">'
+                )
+            );
+            output = string(
+                abi.encodePacked(
+                    output,
+                    "crafted at ",
+                    toString(_data.crafted),
+                    "</text></svg>"
+                )
+            );
         }
-        output = string(abi.encodePacked('data:application/json;base64,', Base64.encode(bytes(string(abi.encodePacked('{"name": "item #', toString(_item), '", "description": "Rarity tier 1, non magical, item crafting.", "image": "data:image/svg+xml;base64,', Base64.encode(bytes(output)), '"}'))))));
+        output = string(
+            abi.encodePacked(
+                "data:application/json;base64,",
+                Base64.encode(
+                    bytes(
+                        string(
+                            abi.encodePacked(
+                                '{"name": "item #',
+                                toString(_item),
+                                '", "description": "Rarity tier 1, non magical, item crafting.", "image": "data:image/svg+xml;base64,',
+                                Base64.encode(bytes(output)),
+                                '"}'
+                            )
+                        )
+                    )
+                )
+            )
+        );
     }
 
-    function get_token_uri_weapon(uint _item) public view returns (string memory output) {
+    function get_token_uri_weapon(
+        uint _item
+    ) public view returns (string memory output) {
         item memory _data = items[_item];
         {
-            codex_items_weapons.weapon memory _weapon = _weapons.item_by_id(_data.item_type);
+            codex_items_weapons.weapon memory _weapon = _weapons.item_by_id(
+                _data.item_type
+            );
             output = '<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin meet" viewBox="0 0 350 350"><style>.base { fill: white; font-family: serif; font-size: 14px; }</style><rect width="100%" height="100%" fill="black" /><text x="10" y="20" class="base">';
-            output = string(abi.encodePacked(output, "category ", get_type(_data.base_type), '</text><text x="10" y="40" class="base">'));
-            output = string(abi.encodePacked(output, "name ", _weapon.name, '</text><text x="10" y="60" class="base">'));
-            output = string(abi.encodePacked(output, "cost ", toString(_weapon.cost/1e18), "gp", '</text><text x="10" y="80" class="base">'));
-            output = string(abi.encodePacked(output, "weight ", toString(_weapon.weight), "lb", '</text><text x="10" y="100" class="base">'));
-            output = string(abi.encodePacked(output, "proficiency ", _weapons.get_proficiency_by_id(_weapon.proficiency), '</text><text x="10" y="120" class="base">'));
-            output = string(abi.encodePacked(output, "encumbrance ", _weapons.get_encumbrance_by_id(_weapon.encumbrance), '</text><text x="10" y="140" class="base">'));
-            output = string(abi.encodePacked(output, "damage 1d", toString(_weapon.damage), " ", _weapons.get_damage_type_by_id(_weapon.damage_type), '</text><text x="10" y="160" class="base">'));
-            output = string(abi.encodePacked(output, "(modifier) x critical (", toString(_weapon.critical_modifier), ") x ", toString(_weapon.critical), '</text><text x="10" y="180" class="base">'));
-            output = string(abi.encodePacked(output, "range ", toString(_weapon.range_increment), "ft", '</text><text x="10" y="200" class="base">'));
-            output = string(abi.encodePacked(output, "description ", _weapon.description, '</text><text x="10" y="220" class="base">'));
-            output = string(abi.encodePacked(output, "crafted by ", toString(_data.crafter), '</text><text x="10" y="240" class="base">'));
-            output = string(abi.encodePacked(output, "crafted at ", toString(_data.crafted), '</text></svg>'));
+            output = string(
+                abi.encodePacked(
+                    output,
+                    "category ",
+                    get_type(_data.base_type),
+                    '</text><text x="10" y="40" class="base">'
+                )
+            );
+            output = string(
+                abi.encodePacked(
+                    output,
+                    "name ",
+                    _weapon.name,
+                    '</text><text x="10" y="60" class="base">'
+                )
+            );
+            output = string(
+                abi.encodePacked(
+                    output,
+                    "cost ",
+                    toString(_weapon.cost / 1e18),
+                    "gp",
+                    '</text><text x="10" y="80" class="base">'
+                )
+            );
+            output = string(
+                abi.encodePacked(
+                    output,
+                    "weight ",
+                    toString(_weapon.weight),
+                    "lb",
+                    '</text><text x="10" y="100" class="base">'
+                )
+            );
+            output = string(
+                abi.encodePacked(
+                    output,
+                    "proficiency ",
+                    _weapons.get_proficiency_by_id(_weapon.proficiency),
+                    '</text><text x="10" y="120" class="base">'
+                )
+            );
+            output = string(
+                abi.encodePacked(
+                    output,
+                    "encumbrance ",
+                    _weapons.get_encumbrance_by_id(_weapon.encumbrance),
+                    '</text><text x="10" y="140" class="base">'
+                )
+            );
+            output = string(
+                abi.encodePacked(
+                    output,
+                    "damage 1d",
+                    toString(_weapon.damage),
+                    " ",
+                    _weapons.get_damage_type_by_id(_weapon.damage_type),
+                    '</text><text x="10" y="160" class="base">'
+                )
+            );
+            output = string(
+                abi.encodePacked(
+                    output,
+                    "(modifier) x critical (",
+                    toString(_weapon.critical_modifier),
+                    ") x ",
+                    toString(_weapon.critical),
+                    '</text><text x="10" y="180" class="base">'
+                )
+            );
+            output = string(
+                abi.encodePacked(
+                    output,
+                    "range ",
+                    toString(_weapon.range_increment),
+                    "ft",
+                    '</text><text x="10" y="200" class="base">'
+                )
+            );
+            output = string(
+                abi.encodePacked(
+                    output,
+                    "description ",
+                    _weapon.description,
+                    '</text><text x="10" y="220" class="base">'
+                )
+            );
+            output = string(
+                abi.encodePacked(
+                    output,
+                    "crafted by ",
+                    toString(_data.crafter),
+                    '</text><text x="10" y="240" class="base">'
+                )
+            );
+            output = string(
+                abi.encodePacked(
+                    output,
+                    "crafted at ",
+                    toString(_data.crafted),
+                    "</text></svg>"
+                )
+            );
         }
-        output = string(abi.encodePacked('data:application/json;base64,', Base64.encode(bytes(string(abi.encodePacked('{"name": "item #', toString(_item), '", "description": "Rarity tier 1, non magical, item crafting.", "image": "data:image/svg+xml;base64,', Base64.encode(bytes(output)), '"}'))))));
+        output = string(
+            abi.encodePacked(
+                "data:application/json;base64,",
+                Base64.encode(
+                    bytes(
+                        string(
+                            abi.encodePacked(
+                                '{"name": "item #',
+                                toString(_item),
+                                '", "description": "Rarity tier 1, non magical, item crafting.", "image": "data:image/svg+xml;base64,',
+                                Base64.encode(bytes(output)),
+                                '"}'
+                            )
+                        )
+                    )
+                )
+            )
+        );
     }
 
     function toString(int value) internal pure returns (string memory) {
-        string memory _string = '';
+        string memory _string = "";
         if (value < 0) {
-            _string = '-';
+            _string = "-";
             value = value * -1;
         }
         return string(abi.encodePacked(_string, toString(uint(value))));
     }
 
     function toString(uint256 value) internal pure returns (string memory) {
-    // Inspired by OraclizeAPI's implementation - MIT license
-    // https://github.com/oraclize/ethereum-api/blob/b42146b063c7d6ee1358846c198246239e9360e8/oraclizeAPI_0.4.25.sol
+        // Inspired by OraclizeAPI's implementation - MIT license
+        // https://github.com/oraclize/ethereum-api/blob/b42146b063c7d6ee1358846c198246239e9360e8/oraclizeAPI_0.4.25.sol
 
         if (value == 0) {
             return "0";
@@ -733,7 +1248,8 @@ contract rarity_crafting is ERC721Enumerable {
 /// @notice Provides a function for encoding some bytes in base64
 /// @author Brecht Devos <brecht@loopring.org>
 library Base64 {
-    bytes internal constant TABLE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    bytes internal constant TABLE =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
     /// @notice Encodes some bytes to the base64 representation
     function encode(bytes memory data) internal pure returns (string memory) {
@@ -762,11 +1278,20 @@ library Base64 {
 
                 let out := mload(add(tablePtr, and(shr(18, input), 0x3F)))
                 out := shl(8, out)
-                out := add(out, and(mload(add(tablePtr, and(shr(12, input), 0x3F))), 0xFF))
+                out := add(
+                    out,
+                    and(mload(add(tablePtr, and(shr(12, input), 0x3F))), 0xFF)
+                )
                 out := shl(8, out)
-                out := add(out, and(mload(add(tablePtr, and(shr(6, input), 0x3F))), 0xFF))
+                out := add(
+                    out,
+                    and(mload(add(tablePtr, and(shr(6, input), 0x3F))), 0xFF)
+                )
                 out := shl(8, out)
-                out := add(out, and(mload(add(tablePtr, and(input, 0x3F))), 0xFF))
+                out := add(
+                    out,
+                    and(mload(add(tablePtr, and(input, 0x3F))), 0xFF)
+                )
                 out := shl(224, out)
 
                 mstore(resultPtr, out)

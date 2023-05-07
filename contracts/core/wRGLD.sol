@@ -16,8 +16,8 @@ interface rarity_gold_interface {
 /// @author swit.eth / https://twitter.com/nomorebear
 contract wrapped_rarity_gold {
     uint public immutable SUMMMONER_ID;
-    rarity_interface public constant rarity = rarity_interface(0xce761D788DF608BD21bdd59d6f4B54b2e27F25Bb);
-    rarity_gold_interface public constant gold = rarity_gold_interface(0x2069B76Afe6b734Fb65D1d099E7ec64ee9CC76B2);
+    rarity_interface public immutable rarity;
+    rarity_gold_interface public immutable gold;
 
     string public constant name = "wrapped rarity gold";
     string public constant symbol = "wrgld";
@@ -31,9 +31,11 @@ contract wrapped_rarity_gold {
     event Transfer(address indexed from, address indexed to, uint amount);
     event Approval(address indexed owner, address indexed spender, uint amount);
 
-    constructor() {
-        SUMMMONER_ID = rarity.next_summoner();
-        rarity.summon(11);
+    constructor(rarity_interface _rarity, rarity_gold_interface _gold) {
+        rarity = _rarity;
+        gold = _gold;
+        SUMMMONER_ID = _rarity.next_summoner();
+        _rarity.summon(11);
     }
 
 
