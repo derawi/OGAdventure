@@ -11,7 +11,7 @@ const config: HardhatUserConfig = {
     settings: {
       optimizer: {
         enabled: true,
-        runs: 100000,
+        runs: 200,
       },
     },
   },
@@ -35,11 +35,6 @@ const config: HardhatUserConfig = {
         process.env.PRIVATE_KEY_RARITY_DEPLOYER as string,
       ],
     },
-  },
-
-  // Build paths
-  paths: {
-    sources: "./core",
   },
 };
 

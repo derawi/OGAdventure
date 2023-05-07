@@ -22,15 +22,21 @@ interface rarity_codex_feats {
 
 contract rarity_feats {
 
-    rarity constant _rm = rarity(0xce761D788DF608BD21bdd59d6f4B54b2e27F25Bb);
-    rarity_codex_feats constant _feats_1 = rarity_codex_feats(0x88db734E9f64cA71a24d8e75986D964FFf7a1E10);
-    rarity_codex_feats constant _feats_2 = rarity_codex_feats(0x7A4Ba2B077CD9f4B13D5853411EcAE12FADab89C);
+    rarity immutable _rm;
+    rarity_codex_feats immutable _feats_1;
+    rarity_codex_feats immutable _feats_2;
+
+    constructor(rarity __rm, rarity_codex_feats __feats_1, rarity_codex_feats __feats_2){
+        _rm = __rm;
+        _feats_1 = __feats_1;
+        _feats_2 = __feats_2;
+    }
 
     function is_valid(uint feat) public pure returns (bool) {
         return (1 <= feat && feat <= 99);
     }
 
-    function feat_by_id(uint _id) public pure returns (
+    function feat_by_id(uint _id) public view returns (
         uint id,
         string memory name,
         bool prerequisites,

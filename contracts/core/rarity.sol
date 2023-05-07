@@ -563,10 +563,10 @@ abstract contract ERC721Enumerable is ERC721, IERC721Enumerable {
 contract rarity is ERC721Enumerable {
     uint public next_summoner;
     uint constant xp_per_day = 250e18;
-    uint constant DAY = 1 days;
+    uint constant DAY = 12 hours;
 
-    string constant name = "Rarity Manifested";
-    string constant symbol = "RM";
+    string constant name = "OG Adeventure";
+    string constant symbol = "OG";
 
     mapping(uint => uint) public xp;
     mapping(uint => uint) public adventurers_log;

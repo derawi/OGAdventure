@@ -1214,8 +1214,8 @@ abstract contract ERC721Enumerable is ERC721, IERC721Enumerable {
 contract rarity_names is ERC721Enumerable {
     uint private next_name = 1;
 
-    rarity_manifested constant _rm = rarity_manifested(0xce761D788DF608BD21bdd59d6f4B54b2e27F25Bb);
-    rarity_gold constant _gold = rarity_gold(0x2069B76Afe6b734Fb65D1d099E7ec64ee9CC76B2);
+    rarity_manifested immutable _rm;
+    rarity_gold immutable _gold;
 
     uint public immutable NAME_AUTHORITY = 1672924;
     uint public immutable KEEPER = 1672965;
@@ -1230,7 +1230,9 @@ contract rarity_names is ERC721Enumerable {
     event NameUpdated(uint indexed name_id, string old_name, string new_name);
     event NameAssigned(uint indexed name_id, uint indexed previous_summoner, uint indexed new_summoner);
 
-    constructor() ERC721("Rarity Names", "names") {
+    constructor(rarity_manifested __rm, rarity_gold __gold) ERC721("Rarity Names", "names") {
+        _rm = __rm;
+        _gold = __gold;
     }
 
     function _isApprovedOrOwner(uint _summoner) internal view returns (bool) {

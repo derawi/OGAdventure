@@ -8,13 +8,13 @@ interface rarity {
 }
 
 contract rarity_gold {
-    string public constant name = "Rarity Gold";
+    string public constant name = "OG Adventures Gold";
     string public constant symbol = "gold";
     uint8 public constant decimals = 18;
 
     uint public totalSupply = 0;
 
-    rarity constant rm = rarity(0xce761D788DF608BD21bdd59d6f4B54b2e27F25Bb);
+    rarity immutable rm;
 
     mapping(uint => mapping (uint => uint)) public allowance;
     mapping(uint => uint) public balanceOf;
@@ -23,6 +23,10 @@ contract rarity_gold {
 
     event Transfer(uint indexed from, uint indexed to, uint amount);
     event Approval(uint indexed from, uint indexed to, uint amount);
+
+    constructor(rarity _rm) {
+        rm = _rm;
+    }
 
     function wealth_by_level(uint level) public pure returns (uint wealth) {
         for (uint i = 1; i < level; i++) {
