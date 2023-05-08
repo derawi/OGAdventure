@@ -19,6 +19,7 @@ const config: HardhatUserConfig = {
   // Networks
   networks: {
     hardhat: {
+      chainId: 1337,
       forking: {
         url: "https://json-rpc.evm.testnet.shimmer.network/",
       },

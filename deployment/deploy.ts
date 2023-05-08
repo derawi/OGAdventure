@@ -48,10 +48,11 @@ async function deploy(name, contractName, signer, ...args) {
 */
 
 async function main() {
-  const signer = (await ethers.getSigners())[0];
+  const signer = (await ethers.getSigners())[1];
 
   // Main
-  const rarity = await deploy("Rarity", "contracts/core/rarity.sol:rarity", signer);
+  // const rarity = await deploy("Rarity", "contracts/core/rarity.sol:rarity", signer);
+  const rarity = { address: "0x28feC82f23D95DE6968BF0f012BDaa610299E19E" };
   const attributes = await deploy(
     "Attributes",
     "contracts/core/attributes.sol:rarity_attributes",
@@ -134,6 +135,7 @@ async function main() {
     gold.address
   );
 
+  // - library
   const library = await deploy(
     "Library",
     "contracts/integration/rarity_library.sol:rarity_library",
@@ -147,7 +149,18 @@ async function main() {
     names.address
   );
 
-  // - library
+  // Full Rarity Setup
+  let raritySetup = {
+    RARITY_ADDR: rarity.address,
+    RARITY_ATTR_ADDR: attributes.address,
+    RARITY_GOLD_ADDR: gold.address,
+    RARITY_SKILLS_ADDR: skills.address,
+    RARITY_FEATS_ADDR: feats.address,
+    RARITY_CRAFTING_ADDR: crafting1.address,
+    DUNGEON_THE_CELLAR_ADDR: crafting_materials1.address,
+  };
+
+  console.log(raritySetup);
 }
 
 // Run the script and handle any errors
