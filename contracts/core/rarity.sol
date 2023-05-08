@@ -1,5 +1,6 @@
 /**
- *Submitted for verification at FtmScan.com on 2021-09-05
+ * Author: The one and only Andre Cronje
+ * Adapted by: derawi
 */
 
 // SPDX-License-Identifier: MIT
