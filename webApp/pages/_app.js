@@ -52,7 +52,7 @@ const GameWrapper = React.memo(function GameWrapper({ Component }) {
   const getLayout = Component.getLayout || ((page) => page);
   return (
     <div className={"relative z-10 pb-24 mb-0 md:mb-24"}>
-      {chainID >= 0 && chainID !== 250 && chainID !== 1337 ? (
+      {chainID >= 0 && chainID !== 1071 && chainID !== 1337 ? (
         <div
           aria-label={"switchchain"}
           className={"flex justify-center w-full text-lg text-center"}
@@ -70,7 +70,7 @@ function AppWrapper(props) {
   const windowInFocus = useWindowInFocus();
 
   useClientEffect(() => {
-    if (windowInFocus && Number(chainID) > 0 && Number(chainID) !== 250 && Number(chainID) !== 1337) {
+    if (windowInFocus && Number(chainID) > 0 && Number(chainID) !== 1071 && Number(chainID) !== 1337) {
       switchChain();
     }
   }, [chainID, windowInFocus, switchChain]);

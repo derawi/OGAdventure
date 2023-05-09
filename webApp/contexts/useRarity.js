@@ -99,21 +99,21 @@ export const RarityContextApp = ({ children }) => {
     const rarityGold = new Contract(process.env.RARITY_GOLD_ADDR, ABI.RARITY_GOLD_ABI);
     const raritySkills = new Contract(process.env.RARITY_SKILLS_ADDR, process.env.RARITY_SKILLS_ABI);
     const rarityFeats = new Contract(process.env.RARITY_FEATS_ADDR, process.env.RARITY_FEATS_ABI);
-    const rarityFarming = new Contract(process.env.RARITY_EXTENDED_FARM_CORE, ABI.RARITY_EXTENDED_FARM_CORE_ABI);
-    const rarityExtendedName = new Contract(process.env.RARITY_EXTENDED_NAME, ABI.RARITY_EXTENDED_NAME_ABI);
+    // const rarityFarming = new Contract(process.env.RARITY_EXTENDED_FARM_CORE, ABI.RARITY_EXTENDED_FARM_CORE_ABI);
+    // const rarityExtendedName = new Contract(process.env.RARITY_EXTENDED_NAME, ABI.RARITY_EXTENDED_NAME_ABI);
 
     // Disable not deployed contracts
     return [
       rarity.ownerOf(tokenID),
       rarity.summoner(tokenID),
       //   rarityExtendedName.get_name(tokenID),
-      rarityAttr.character_created(tokenID),
-      rarityAttr.ability_scores(tokenID),
-      rarityAttr.level_points_spent(tokenID),
-      rarityGold.balanceOf(tokenID),
-      rarityGold.claimable(tokenID),
-      raritySkills.get_skills(tokenID),
-      rarityFeats.get_feats_by_id(tokenID),
+      // rarityAttr.character_created(tokenID),
+      // rarityAttr.ability_scores(tokenID),
+      // rarityAttr.level_points_spent(tokenID),
+      // rarityGold.balanceOf(tokenID),
+      // rarityGold.claimable(tokenID),
+      // raritySkills.get_skills(tokenID),
+      // rarityFeats.get_feats_by_id(tokenID),
       //   rarityFarming.adventurerStatus(tokenID, 1),
       //   rarityFarming.adventurerStatus(tokenID, 2),
     ];
@@ -123,7 +123,7 @@ export const RarityContextApp = ({ children }) => {
    **	Fetch all the items for the adventurer.
    **************************************************************************/
   async function multicall(calls) {
-    const ethcallProvider = await newEthCallProvider(provider, Number(chainID) === 1071);
+    const ethcallProvider = await newEthCallProvider(provider, Number(chainID) === 1337);
     const callResult = await ethcallProvider.tryAll(calls);
     return callResult;
   }
@@ -158,7 +158,7 @@ export const RarityContextApp = ({ children }) => {
     const _adventurer = {
       tokenID: tokenID,
       owner: owner,
-      name: name,
+      // name: name,
       displayName: `${name ? name : tokenID}, ${CLASSES[Number(adventurer["_class"])]?.name} LVL ${Number(
         adventurer["_level"]
       )}`,
@@ -189,22 +189,22 @@ export const RarityContextApp = ({ children }) => {
       },
       skills: skills,
       feats: (feats || []).map((f) => Number(f)),
-      skin: CLASSES[Number(adventurer["_class"])]?.images?.front,
-      professions: {
-        canLevelUp: false,
-        //   Number(farmingWood["xp"]) >= xpRequired(Number(farmingWood["level"]) + 1) ||
-        //   Number(farmingOre["xp"]) >= xpRequired(Number(farmingOre["level"]) + 1),
-        wood: {
-          //   level: Number(farmingWood["level"]),
-          //   xp: Number(farmingWood["xp"]),
-          //   canLevelUp: Number(farmingWood["xp"]) >= xpRequired(Number(farmingWood["level"]) + 1),
-        },
-        ore: {
-          //   level: Number(farmingOre["level"]),
-          //   xp: Number(farmingOre["xp"]),
-          //   canLevelUp: Number(farmingOre["xp"]) >= xpRequired(Number(farmingOre["level"]) + 1),
-        },
-      },
+      // skin: CLASSES[Number(adventurer["_class"])]?.images?.front,
+      // professions: {
+      //   canLevelUp: false,
+      //   //   Number(farmingWood["xp"]) >= xpRequired(Number(farmingWood["level"]) + 1) ||
+      //   //   Number(farmingOre["xp"]) >= xpRequired(Number(farmingOre["level"]) + 1),
+      //   wood: {
+      //     //   level: Number(farmingWood["level"]),
+      //     //   xp: Number(farmingWood["xp"]),
+      //     //   canLevelUp: Number(farmingWood["xp"]) >= xpRequired(Number(farmingWood["level"]) + 1),
+      //   },
+      //   ore: {
+      //     //   level: Number(farmingOre["level"]),
+      //     //   xp: Number(farmingOre["xp"]),
+      //     //   canLevelUp: Number(farmingOre["xp"]) >= xpRequired(Number(farmingOre["level"]) + 1),
+      //   },
+      // },
     };
 
     //Hack to bactch all of this in only 1 render
@@ -243,10 +243,12 @@ export const RarityContextApp = ({ children }) => {
     });
     console.log(uniqueElements);
     console.log(preparedCalls);
+    console.log("Multicall");
+
     const callResults = await multicall(preparedCalls);
     const chunkedCallResult = chunk(callResults, chunkSize);
-
     console.log(chunkedCallResult);
+
     performBatchedUpdates(() => {
       tokensIDs?.forEach((tokenID, i) => {
         setRarity(tokenID, chunkedCallResult[i]);
