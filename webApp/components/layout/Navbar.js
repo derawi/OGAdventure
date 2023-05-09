@@ -110,8 +110,9 @@ function Navbar() {
               </Link>
               <Link href={"/"}>
                 <div>
-                  <p className={"hidden font-title cursor-pointer md:block"}>{"Rarity"}</p>
-                  <p className={"hidden font-title cursor-pointer md:block"}>{"Extended"}</p>
+                  <p className={"hidden font-title cursor-pointer md:block"}>{"OG"}</p>
+                  <p className={"hidden font-title cursor-pointer md:block"}>{"Adventures"}</p>
+                  <p className={"text-plain text-sm transition-opacity"}>{"By Rarity Extended"}</p>
                 </div>
               </Link>
             </div>

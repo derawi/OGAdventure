@@ -89,7 +89,7 @@ const MobileMenu = React.memo(function MobileMenu() {
                   <div className={"flex overflow-y-scroll relative flex-col pt-2 h-full bg-600"}>
                     <div>
                       <div className={"flex justify-between items-start p-4"}>
-                        <Dialog.Title className={"text-lg font-medium text-plain"}>{"Rarity Extended"}</Dialog.Title>
+                        <Dialog.Title className={"text-lg font-medium text-plain"}>{"OG Adventures"}</Dialog.Title>
                         <div className={"flex items-center"}>
                           <button
                             type={"button"}

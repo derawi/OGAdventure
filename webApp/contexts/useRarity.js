@@ -107,13 +107,13 @@ export const RarityContextApp = ({ children }) => {
       rarity.ownerOf(tokenID),
       rarity.summoner(tokenID),
       //   rarityExtendedName.get_name(tokenID),
-      // rarityAttr.character_created(tokenID),
-      // rarityAttr.ability_scores(tokenID),
-      // rarityAttr.level_points_spent(tokenID),
-      // rarityGold.balanceOf(tokenID),
-      // rarityGold.claimable(tokenID),
-      // raritySkills.get_skills(tokenID),
-      // rarityFeats.get_feats_by_id(tokenID),
+      rarityAttr.character_created(tokenID),
+      rarityAttr.ability_scores(tokenID),
+      rarityAttr.level_points_spent(tokenID),
+      rarityGold.balanceOf(tokenID),
+      rarityGold.claimable(tokenID),
+      raritySkills.get_skills(tokenID),
+      rarityFeats.get_feats_by_id(tokenID),
       //   rarityFarming.adventurerStatus(tokenID, 1),
       //   rarityFarming.adventurerStatus(tokenID, 2),
     ];
@@ -189,7 +189,7 @@ export const RarityContextApp = ({ children }) => {
       },
       skills: skills,
       feats: (feats || []).map((f) => Number(f)),
-      // skin: CLASSES[Number(adventurer["_class"])]?.images?.front,
+      skin: CLASSES[Number(adventurer["_class"])]?.images?.front,
       // professions: {
       //   canLevelUp: false,
       //   //   Number(farmingWood["xp"]) >= xpRequired(Number(farmingWood["level"]) + 1) ||
@@ -254,6 +254,7 @@ export const RarityContextApp = ({ children }) => {
         setRarity(tokenID, chunkedCallResult[i]);
       });
     });
+    console.log("Error?");
     isUpdatingRarities = false;
     NProgress.done();
 
