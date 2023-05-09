@@ -1,26 +1,26 @@
-import React from "react";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import RarityCareSystem from "components/RarityCareSystem";
-import MobileDetails from "components/MobileDetails";
-import AdventurerDetails from "components/sections/Adventurer";
+import React from 'react';
+import Link from 'next/link';
+import {useRouter} from 'next/router';
+import RarityCareSystem from 'components/RarityCareSystem';
+import MobileDetails from 'components/MobileDetails';
+import AdventurerDetails from 'components/sections/Adventurer';
 
-const MobileIndex = React.memo(function MobileIndex({ favoritesAdventurers }) {
-  const router = useRouter();
+const MobileIndex = React.memo(function MobileIndex({favoritesAdventurers}) {
+	const router = useRouter();
 
-  return (
-    <div className={"relative flex-1 mt-0"}>
-      <AdventurerDetails media={"sm"} />
-      <section className={"grid grid-cols-2 gap-2 my-4"}>
-        <Link href={"/party"}>
-          <button
-            className={`box p-4 text-plain text-sm text-center transition-opacity ${
-              router.pathname === "/" || router.pathname === "/recruit" ? "" : "cursor-pointer"
-            }`}>
-            {"Your Party"}
-          </button>
-        </Link>
-        {/* 
+	return (
+		<div className={'relative flex-1 mt-0'}>
+			<AdventurerDetails media={'sm'} />
+			<section className={'grid grid-cols-2 gap-2 my-4'}>
+				<Link href={'/party'}>
+					<button
+						className={`box p-4 text-plain text-sm text-center transition-opacity ${
+							router.pathname === '/' || router.pathname === '/recruit' ? '' : 'cursor-pointer'
+						}`}>
+						{'Your Party'}
+					</button>
+				</Link>
+				{/* 
 		<Link href={'/adventures'}>
 					<button
 						className={`box p-4 text-plain text-sm text-center transition-opacity ${router.pathname === '/adventures' || router.pathname.startsWith('/adventures') ? '' : 'cursor-pointer'}`}>
@@ -44,15 +44,15 @@ const MobileIndex = React.memo(function MobileIndex({ favoritesAdventurers }) {
           </button>
         </Link>
 		*/}
-        <Link href={"/skills"}>
-          <button
-            className={`box p-4 text-plain text-sm text-center transition-opacity ${
-              router.pathname === "/skills" ? "" : "cursor-pointer"
-            }`}>
-            {"Skills"}
-          </button>
-        </Link>
-        {/* 
+				<Link href={'/skills'}>
+					<button
+						className={`box p-4 text-plain text-sm text-center transition-opacity ${
+							router.pathname === '/skills' ? '' : 'cursor-pointer'
+						}`}>
+						{'Skills'}
+					</button>
+				</Link>
+				{/* 
         <Link href={"/feats"}>
           <button
             className={`box p-4 text-plain text-sm text-center transition-opacity ${
@@ -77,11 +77,11 @@ const MobileIndex = React.memo(function MobileIndex({ favoritesAdventurers }) {
             {"Bank"}
           </button>
         </Link> */}
-      </section>
-      {/* <RarityCareSystem minimal favoritesAdventurers={favoritesAdventurers} /> */}
-      <MobileDetails />
-    </div>
-  );
+			</section>
+			{/* <RarityCareSystem minimal favoritesAdventurers={favoritesAdventurers} /> */}
+			<MobileDetails />
+		</div>
+	);
 });
 
 export default MobileIndex;
