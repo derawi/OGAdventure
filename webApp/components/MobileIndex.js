@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
-import RarityCareSystem from 'components/RarityCareSystem';
+// import RarityCareSystem from 'components/RarityCareSystem';
 import MobileDetails from 'components/MobileDetails';
 import AdventurerDetails from 'components/sections/Adventurer';
 

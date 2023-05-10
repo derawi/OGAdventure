@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Template from 'components/templates/Head';
-import RarityCareSystem from 'components/RarityCareSystem';
+// import RarityCareSystem from 'components/RarityCareSystem';
 import MobileIndex from 'components/MobileIndex';
 import AdventurerDetails from 'components/AdventurerCard';
 import useLocalStorage from 'hooks/useLocalStorage';
@@ -19,7 +19,7 @@ function NewAdventurer() {
 				<Image src={'/classes/front/placeholder.svg'} width={140} height={140} />
 			</div>
 			<div className={'px-4'}>
-				<Link href={'/recruit#content'}>
+				<Link href={'/recruit#content'}> 
 					<button className={'mt-4 button-highlight-outline'}>
 						<p>{'Hire Adventurer'}</p>
 					</button>

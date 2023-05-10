@@ -1,16 +1,16 @@
-import	React							from	'react';
-import	IconAttributeDamage				from	'components/icons/IconAttributeDamage';
-import	IconAttributeDamageType			from	'components/icons/IconAttributeDamageType';
-import	IconAttributeCritical			from	'components/icons/IconAttributeCritical';
-import	IconAttributeProficiency		from	'components/icons/IconAttributeProficiency';
-import	IconAttributeProficiencyArmor	from	'components/icons/IconAttributeProficiencyArmor';
-import	IconAttributePenaltyArmor		from	'components/icons/IconAttributePenaltyArmor';
-import	IconAttributeSpellFailure		from	'components/icons/IconAttributeSpellFailure';
-import	IconAttributeRange				from	'components/icons/IconAttributeRange';
-import	IconAttributeDexterity			from	'components/icons/IconAttributeDexterity';
-import	IconAttributeArmor				from	'components/icons/IconAttributeArmor';
+import React from 'react';
+import IconAttributeDamage from 'components/icons/IconAttributeDamage';
+import IconAttributeDamageType from 'components/icons/IconAttributeDamageType';
+import IconAttributeCritical from 'components/icons/IconAttributeCritical';
+import IconAttributeProficiency from 'components/icons/IconAttributeProficiency';
+import IconAttributeProficiencyArmor from 'components/icons/IconAttributeProficiencyArmor';
+import IconAttributePenaltyArmor from 'components/icons/IconAttributePenaltyArmor';
+import IconAttributeSpellFailure from 'components/icons/IconAttributeSpellFailure';
+import IconAttributeRange from 'components/icons/IconAttributeRange';
+import IconAttributeDexterity from 'components/icons/IconAttributeDexterity';
+import IconAttributeArmor from 'components/icons/IconAttributeArmor';
 
-function	ItemAttributes({category, item}) {
+function ItemAttributes({category, item}) {
 	if (category && category.includes('weapon')) {
 		return (
 			<div className={'mt-2'}>
@@ -47,7 +47,11 @@ function	ItemAttributes({category, item}) {
 						<p className={'ml-2 text-xs'}>{'Critical'}</p>
 					</div>
 					<div className={'flex flex-row items-center'}>
-						<p className={'text-sm'}>{item.critical_modifier !== 0 ? `${20 + item.critical_modifier}-20/x${item.critical}` : `x${item.critical}`}</p>
+						<p className={'text-sm'}>
+							{item.critical_modifier !== 0
+								? `${20 + item.critical_modifier}-20/x${item.critical}`
+								: `x${item.critical}`}
+						</p>
 					</div>
 				</div>
 				<div className={'flex flex-row justify-between items-center my-1'}>
