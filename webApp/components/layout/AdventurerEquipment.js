@@ -74,7 +74,7 @@ function	OverviewEquipment({provider, raritySkin}) {
 	**********************************************************************************************/
 	function	onClaimXP() {
 		actions.goAdventure({
-			loader: 'Claiming XP...',
+			loader: 'Starting Adventure...',
 			provider,
 			contractAddress: process.env.RARITY_ADDR,
 			tokenID: currentAdventurer.tokenID,
@@ -130,7 +130,7 @@ function	OverviewEquipment({provider, raritySkin}) {
 				<button
 					onClick={onClaimXP}
 					className={'flex mt-4 w-full flex-center button-highlight'}>
-					<p className={' text-sm select-none'}>{'Claim XP'}</p>
+					<p className={' text-sm select-none'}>{'Start Adventure'}</p>
 				</button>
 			);
 		}
@@ -139,7 +139,7 @@ function	OverviewEquipment({provider, raritySkin}) {
 				<button
 					onClick={onClaimGold}
 					className={'flex mt-4 w-full flex-center button-highlight'}>
-					<p className={' text-sm select-none'}>{'Claim XP'}</p>
+					<p className={' text-sm select-none'}>{'Start Adventure'}</p>
 				</button>
 			);
 		}
