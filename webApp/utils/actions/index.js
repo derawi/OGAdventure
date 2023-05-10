@@ -209,8 +209,8 @@ export async function recruitAdventurer({provider, classID}, callback) {
 			callback({error: false, data: classID});
 			toast.dismiss(_toast);
 			toast.success(
-				'Transaction successful - due to network congestion it might take 2-5 minutes till your adventurer arrives',
-				{duration: 120000}
+				'Transaction successful - due to network congestion it might take a couple of minutes till your adventurer arrives',
+				{duration: 30000}
 			);
 		} else {
 			toast.dismiss(_toast);

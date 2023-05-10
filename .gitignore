@@ -31,3 +31,4 @@ pnpm-debug.log*
 .env
 .next
 .vercel
+OGAdventure.code-workspace
