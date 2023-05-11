@@ -91,8 +91,13 @@ function	Footer() {
 					{'Options'}
 				</div>
 				<div>
+					<a href={'https://discord.gg/frQCFsew23'} target={'_blank'} rel={'noreferrer'} className={'hover:underline'}>
+						{'🔥🔥🔥 Join our Discord 🔥🔥🔥'}
+					</a>
+				</div>
+				<div>
 					<a href={'https://github.com/Rarity-Extended/RarityExtended'} target={'_blank'} rel={'noreferrer'} className={'hover:underline'}>
-						{'Made with 💙 by the 🕹 community'}
+						{'All rights reserved by Rarity Extended'}
 					</a>
 				</div>
 			</div>
