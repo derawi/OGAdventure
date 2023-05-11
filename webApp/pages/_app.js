@@ -24,6 +24,10 @@ import SectionNoWallet from 'components/sections/SectionNoWallet';
 import useWindowInFocus from 'hooks/useWindowInFocus';
 import useClientEffect from 'hooks/useClientEffect';
 
+import {useEffect} from 'react';
+import Router from 'next/router';
+import ReactGA from 'react-ga4';
+
 import 'style/Default.css';
 
 const GameWrapper = React.memo(function GameWrapper({Component}) {
@@ -68,6 +72,12 @@ const GameWrapper = React.memo(function GameWrapper({Component}) {
 function AppWrapper(props) {
 	const {switchChain, chainID} = useWeb3();
 	const windowInFocus = useWindowInFocus();
+
+	useEffect(() => {
+		ReactGA.initialize('G-1PVCSLB3PM'); // Replace with your GA4 Measurement ID
+		ReactGA.send('pageview'); // Log initial pageview
+		Router.events.on('routeChangeComplete', () => ReactGA.send('pageview')); // Log pageviews on route change
+	}, []);
 
 	useClientEffect(() => {
 		if (windowInFocus && Number(chainID) > 0 && Number(chainID) !== 1071 && Number(chainID) !== 1337) {
