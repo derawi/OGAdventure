@@ -242,20 +242,16 @@ export const RarityContextApp = ({children}) => {
 			preparedCalls.push(...prepareAdventurer(token.tokenID));
 			tokensIDs.push(token.tokenID);
 		});
-		console.log(uniqueElements);
-		console.log(preparedCalls);
-		console.log('Multicall');
 
 		const callResults = await multicall(preparedCalls);
 		const chunkedCallResult = chunk(callResults, chunkSize);
-		console.log(chunkedCallResult);
 
 		performBatchedUpdates(() => {
 			tokensIDs?.forEach((tokenID, i) => {
 				setRarity(tokenID, chunkedCallResult[i]);
 			});
 		});
-		console.log('Error?');
+
 		isUpdatingRarities = false;
 		NProgress.done();
 
