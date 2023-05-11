@@ -209,7 +209,7 @@ export async function recruitAdventurer({provider, classID}, callback) {
 			callback({error: false, data: classID});
 			toast.dismiss(_toast);
 			toast.success(
-				'Transaction successful - due to network congestion it might take a couple of minutes till your adventurer arrives',
+				'Transaction successful - due to network congestion it might take a couple of minutes till your adventurer arrives. Try refreshing the site.',
 				{duration: 30000}
 			);
 		} else {
